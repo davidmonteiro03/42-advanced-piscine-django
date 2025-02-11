@@ -19,10 +19,10 @@ def my_var_to_dict():
          ('Frusciante', '1970'),
          ('Thompson', '1949'),
          ('Burton', '1939')]
-    ft_d_set = {}
-    for elem in d:
-        ft_d_set[elem[1]] = elem[0]
-    for key, value in zip(ft_d_set.keys(), ft_d_set.values()):
+    ft_d_dict = {}
+    for value, key in d:
+        ft_d_dict[key] = value
+    for key, value in ft_d_dict.items():
         print(key, value, sep=" : ")
 
 

@@ -19,7 +19,7 @@ def my_all_in():
             continue
         ft_tmp = None
         ft_state = None
-        for key, value in zip(states.keys(), states.values()):
+        for key, value in states.items():
             if key.lower() == i.lower():
                 ft_state = key
                 ft_tmp = value
@@ -29,13 +29,13 @@ def my_all_in():
             continue
         ft_tmp = None
         ft_capital = None
-        for key, value in zip(capital_cities.keys(), capital_cities.values()):
+        for key, value in capital_cities.items():
             if value.lower() == i.lower():
                 ft_tmp = key
                 ft_capital = value
                 break
         if ft_tmp:
-            for key, value in zip(states.keys(), states.values()):
+            for key, value in states.items():
                 if value.lower() == ft_tmp.lower():
                     print(f"{ft_capital} is the capital of {key}")
                     break

@@ -20,7 +20,7 @@ def my_sort():
          'Thompson': '1949',
          'Burton': '1939'}
     composers = []
-    for key, value in zip(d.keys(), d.values()):
+    for key, value in d.items():
         composers.append((int(value), key))
     composers.sort()
     for c in composers:
