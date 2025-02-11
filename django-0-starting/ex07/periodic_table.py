@@ -139,7 +139,9 @@ td {
                             <div class="athom-mass">{_[__].get('molar')}</div>
                         </div>
                         <div class="element-symbol">{_[__].get('small')}</div>
-                        <div class="element-name"><h4>{_[__].get('name')}</h4></div>
+                        <div class="element-name">
+                            <h4>{_[__].get('name')}</h4>
+                        </div>
                     </div>
                 </td>""", file=fileout)
                 if __ < len(_) - 1:
