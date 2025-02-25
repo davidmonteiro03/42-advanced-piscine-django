@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-import antigravity
+from antigravity import geohash
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
         except Exception:
             raise Exception("Error reading datedow.")
         try:
-            antigravity.geohash(latitude, longitude, datedow)
+            geohash(latitude, longitude, datedow)
         except Exception:
             raise Exception("Error doing geohash.")
     except Exception as e:
