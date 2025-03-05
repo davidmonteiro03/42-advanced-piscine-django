@@ -1,0 +1,33 @@
+{% extends 'ex02/base.html' %}
+{% block title %}
+<title>Ex03: Fifty shades of bic.</title>
+{% endblock %}
+{% block style %}
+<style>
+	th,
+	td {
+		height: 40px;
+		width: 80px;
+	}
+</style>
+{% endblock %}
+{% block content %}
+<table>
+	<thead>
+		<tr>
+			{% for c in colors %}
+			<th>{{ c }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for shade in lines %}
+		<tr>
+			{% for box in shade %}
+			<td style="background-color: {{ box.color }};"></td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

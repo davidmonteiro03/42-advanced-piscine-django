@@ -1,0 +1,379 @@
+{% extends 'ex01/base.html' %}
+{% load static %}
+{% block title %}
+<title>Ex01: Template engine.</title>
+{% endblock %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'style2.css' %}">
+{% endblock %}
+{% block content %}
+<div id="content">
+	<div id="description" style="margin-top: 30px;">
+		<h2>Template</h2>
+		<p>A template is a file where you describe how the result should be represented.</p>
+		<p>Templates are often .html files, with HTML code describing the layout of a web page, but it can also be in
+			other file formats to present other results, but we will concentrate on .html files.</p>
+		<p>Django uses standard HTML to describe the layout, but uses Django tags to add logic:</p>
+		<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&lt;h1&gt;My Homepage&lt;/h1&gt;
+
+&lt;p&gt;My name is &#123;&#123; firstname &#125;&#125;.&lt;/p&gt;</pre>
+		<p>The templates of an application is located in a folder named <code
+				style="background-color: #eee; padding: 1px 2px; font-size: 15px;">templates</code>.</p>
+	</div>
+
+	<div id="blockTag" style="margin-top: 30px;">
+		<h2>block Template Tag</h2>
+
+		<div id="definitionAndUsage" style="margin-top: 30px;">
+			<h3>Definition and Usage</h3>
+			<p>The <code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">block</code> tag has two
+				functions:</p>
+			<ol>
+				<li>It is a placeholder for content.</li>
+				<li>It is content that will replace the placeholder.</li>
+			</ol>
+			<p>In <i>master</i> templates the <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">block</code> tag is a placeholder
+				that will be replaced by a block in a child template with the same name.</p>
+			<p>In <i>child</i> templates the <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">block</code> tag is content that
+				will replace the placeholder in the master template with the same name.</p>
+		</div>
+
+		<div id="example" style="margin-top: 30px;">
+			<h3>Example</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% extends "mymaster.html" %&#125;
+
+&#123;% block userinfo %&#125;
+  &lt;h2&gt;John Doe&lt;/h2&gt;
+  &lt;p&gt;Explorer of life.&lt;/p&gt;
+&#123;% endblock %&#125;</pre>
+		</div>
+
+		<div id="syntax" style="margin-top: 30px;">
+			<h3>Syntax</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% block <i>name</i> %&#125;
+  ...
+&#123;% endblock %&#125;</pre>
+		</div>
+
+		<div id="parameters" style="margin-top: 30px;">
+			<h3>Parameters</h3>
+			<table style="width: 100%; border: 1px solid; border-collapse: collapse; text-align: left;">
+				<thead>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Value</th>
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;"><i>name</i></td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Specifies that name of
+							the block.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div id="forTag" style="margin-top: 30px;">
+		<h2>for Template Tag</h2>
+
+		<div id="definitionAndUsage" style="margin-top: 30px;">
+			<h3>Definition and Usage</h3>
+			<p>The <code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">for</code> tag allows you to
+				iterate over items in an object.</p>
+		</div>
+
+		<div id="example" style="margin-top: 30px;">
+			<h3>Example</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% for x, y in mycar.items %&#125;
+  &lt;p&gt;The &#123;&#123; x &#125;&#125; is &#123;&#123; y &#125;&#125;.&lt;/p&gt;
+&#123;% endfor %&#125;</pre>
+		</div>
+
+		<div id="syntax" style="margin-top: 30px;">
+			<h3>Syntax</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% for <i>item</i> in <i>object</i> %&#125;
+...
+&#123;% endfor %&#125;</pre>
+		</div>
+
+		<div id="parameters" style="margin-top: 30px;">
+			<h3>Parameters</h3>
+			<table style="width: 100%; border: 1px solid; border-collapse: collapse; text-align: left;">
+				<thead>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Value</th>
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;"><i>item</i></td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Required. Variable
+							name(s) that represents the item(s) of the iterable object.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;"><i>object</i></td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Required. An iterable
+							object.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="builtInVariables" style="margin-top: 30px;">
+			<h3>Built-in <i>for</i> Variables</h3>
+			<p>There are some built-in variables you can use inside for loops:</p>
+			<table style="width: 100%; border: 1px solid; border-collapse: collapse; text-align: left;">
+				<thead>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Variable</th>
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.counter</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">The current iteration,
+							starting at 1.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.counter0</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">The current iteration,
+							starting at 0.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.first</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Check if this iteration
+							is the first iteration.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.last</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Check if this iteration
+							is the last iteration.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.parentloop</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Refers to the parent
+							loop.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.revcounter</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">The current iteration,
+							counting backwords, ending at 1.</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">forloop.revcounter0
+						</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">The current iteration,
+							counting backwords, ending at 0.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div id="ifTag" style="margin-top: 30px;">
+		<h2>if Template Tag</h2>
+
+		<div id="definitionAndUsage" style="margin-top: 30px;">
+			<h3>Definition and Usage</h3>
+			<p>The <code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">if</code> tag allows you to
+				write conditional statements.</p>
+			<p>Use <code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">if</code> statements to
+				output a block of code if a condition is true.</p>
+			<p>You can use <code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">else</code> or <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">elif</code> (short for "else if")
+				to specify what to do when the if condition is false.</p>
+		</div>
+
+		<div id="example1" style="margin-top: 30px;">
+			<h3>Example 1</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% if myvar == 1 %&#125;
+  &lt;h1&gt;Hello!&lt;/h1&gt;
+&#123;% else %&#125;
+  &lt;h1&gt;Greetings!&lt;/h1&gt;
+&#123;% endif %&#125;</pre>
+		</div>
+
+		<div id="example2" style="margin-top: 30px;">
+			<h3>Example 2</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% if myvar == 1 %&#125;
+  &lt;h1&gt;Hello!&lt;/h1&gt;
+&#123;% elif myvar == 2 %&#125;
+  &lt;h1&gt;Welcome!&lt;/h1&gt;
+&#123;% else %&#125;
+  &lt;h1&gt;Greetings!&lt;/h1&gt;
+&#123;% endif %&#125;</pre>
+		</div>
+
+		<div id="syntax" style="margin-top: 30px;">
+			<h3>Syntax</h3>
+			<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% if <i>condition</i> %&#125;
+...
+&#123;% endif %&#125;</pre>
+		</div>
+
+		<div id="parameters" style="margin-top: 30px;">
+			<h3>Parameters</h3>
+			<table style="width: 100%; border: 1px solid; border-collapse: collapse; text-align: left;">
+				<thead>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Value</th>
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;"><i>condition</i></td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">Required. Anything that
+							evaluates to either true or false.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="operators" style="margin-top: 30px;">
+			<h3>Operators</h3>
+			<table style="width: 100%; border: 1px solid; border-collapse: collapse; text-align: left;">
+				<thead>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Variable</th>
+						<th style="border: 1px solid; border-collapse: collapse; padding: 10px;">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">==</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is equal to</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">!=</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is not equal to</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">&lt;</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is less than</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">&lt;=</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is less than, or equal
+							to</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">&gt;</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is greater than</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">&gt;=</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is greater than, or
+							equal to</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">and</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">condition1 <i>and</i>
+							condition2 must be true</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">or</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">condition1 <i>or</i>
+							condition2 must be true</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">in</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">an item must be present
+							in an object</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is the same value as
+						</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is not</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is not the same value
+							as</td>
+					</tr>
+					<tr style="border: 1px solid; border-collapse: collapse;">
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">not in</td>
+						<td style="border: 1px solid; border-collapse: collapse; padding: 10px;">is not in</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div id="variables" style="margin-top: 30px;">
+		<h2>Django Template Variables</h2>
+
+		<div id="templateVariables" style="margin-top: 30px;">
+			<h3>Template Variables</h3>
+			<p>In Django templates, you can render variables by putting them inside <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">&#123;&#123; &#125;&#125;</code>
+				brackets:</p>
+
+			<div id="example" style="margin-top: 30px;">
+				<h4>Example</h4>
+				<p><code
+						style="background-color: #eee; padding: 1px 2px; font-size: 15px;">templates/template.html</code>:
+				</p>
+				<pre
+					style="background-color: #eee; padding: 10px; font-size: 14px;">&lt;h1&gt;Hello &#123;&#123; firstname &#125;&#125;, how are you?&lt;/h1&gt;</pre>
+			</div>
+		</div>
+
+		<div id="createVariableInView" style="margin-top: 30px;">
+			<h3>Create Variable in View</h3>
+			<p>The variable <code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">firstname</code> in
+				the example above was sent to the template via a view:</p>
+
+			<div id="viewsPy" style="margin-top: 30px;">
+				<p><code style="background-color: #eee; padding: 1px 2px; font-size: 15px;">views.py</code>:
+				</p>
+				<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+from django.http import HttpResponse
+from django.template import loader
+
+def testing(request):
+  template = loader.get_template('template.html')
+  context = {
+    'firstname': 'Linus',
+  }
+  return HttpResponse(template.render(context, request))</pre>
+			</div>
+		</div>
+
+		<div id="createVariableInTemplate" style="margin-top: 30px;">
+			<h3>Create Variables in Template</h3>
+			<p>You can also create variables directly in the template, by using the <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">&#123;% with %&#125;</code>
+				template tag.</p>
+			<p>The variable is available until the <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">&#123;% endwith %&#125;</code>
+				tag appears:</p>
+
+			<div id="example" style="margin-top: 30px;">
+				<h4>Example</h4>
+				<p><code
+						style="background-color: #eee; padding: 1px 2px; font-size: 15px;">templates/template.html</code>:
+				</p>
+				<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+&#123;% with firstname="Tobias" %&#125;
+&lt;h1&gt;Hello &#123;&#123; firstname &#125;&#125;, how are you?&lt;/h1&gt;
+&#123;% endwith %&#125;</pre>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

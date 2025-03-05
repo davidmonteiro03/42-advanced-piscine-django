@@ -1,0 +1,80 @@
+{% extends 'ex01/base.html' %}
+{% block title %}
+<title>Ex01: Display process of a static page.</title>
+{% endblock %}
+{% block content %}
+<div id="content">
+	<div id="browserURL" style="margin-top: 30px;">
+		<h2>Browser Request URL</h2>
+		<pre style="background-color: #eee; padding: 10px; font-size: 14px;">http://127.0.0.1:8000/ex01/display</pre>
+	</div>
+	<div id="projectUrlsFile" style="margin-top: 30px;">
+		<h2><code style="background-color: #eee; padding: 2px 4px; font-size: 22px;">urls.py</code> file located in
+			<code style="background-color: #eee; padding: 2px 4px; font-size: 22px;">d05</code>
+			directory (project folder)
+		</h2>
+		<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+# ...
+from django.urls import path, include
+# ...
+
+# ...
+urlpatterns = [
+    # ...
+    path('ex01', include('ex01.urls')),
+    # ...
+]
+# ...</pre>
+	</div>
+	<div id="appUrlsFile" style="margin-top: 30px;">
+		<h2><code style="background-color: #eee; padding: 2px 4px; font-size: 22px;">urls.py</code> file located in
+			<code style="background-color: #eee; padding: 2px 4px; font-size: 22px;">ex01</code>
+			directory (app folder)
+		</h2>
+		<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+# ...
+from django.urls import re_path
+from . import views
+# ...
+
+# ...
+urlpatterns = [
+    # ...
+    re_path(r'^/display/?$', views.display),
+    # ...
+]
+# ...</pre>
+	</div>
+	<div id="viewsFile" style="margin-top: 30px;">
+		<h2><code style="background-color: #eee; padding: 2px 4px; font-size: 22px;">views.py</code> file located in
+			<code style="background-color: #eee; padding: 2px 4px; font-size: 22px;">ex01</code>
+			directory (app folder)
+		</h2>
+		<pre style="background-color: #eee; padding: 10px; font-size: 14px;">
+# ...
+from django.shortcuts import render
+# ...
+
+# ...
+def display(request):
+    return render(request, 'display.html')
+# ...</pre>
+	</div>
+	<div id="explanations" style="margin-top: 30px;">
+		<h2>Explaining the process</h2>
+		<ol>
+			<li>Open any browser and search for the link you want to visit (it must be at <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">http://localhost:8000</code>).
+			</li>
+			<li>The system will check if your request matches any of allowed urls (in the example above it will check
+				firstly in the main project urls and then it will check the app urls).</li>
+			<li>Then it will return a view that will try to load a <code
+					style="background-color: #eee; padding: 1px 2px; font-size: 15px;">.html</code> template.
+			</li>
+			<li>If the template was found, it will give you a response with the rendered html and the result can be
+				checked in the browser you're using.</li>
+			<li>If something goes wrong, it will give you an error.</li>
+		</ol>
+	</div>
+</div>
+{% endblock %}

@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ex00.apps.Ex00Config',
+    'ex01.apps.Ex01Config',
+    'ex02.apps.Ex02Config',
+    'ex03.apps.Ex03Config',
 ]
 
 MIDDLEWARE = [
@@ -116,9 +119,74 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+HISTORY_LOG_FILE = BASE_DIR / 'ex02' / 'history.log'
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "formatters": {
+        "django.server": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[{server_time}] {message}",
+            "style": "{",
+        },
+        "history_formatter": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[{asctime}] {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+        },
+        "django.server": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "django.server",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        "history_handler": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": HISTORY_LOG_FILE,
+            "formatter": "history_formatter",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+        },
+        "django.server": {
+            "handlers": ["django.server"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "history": {
+            "handlers": ["console", "history_handler"],
+            "level": "INFO",
+        },
+    },
+}
