@@ -1,0 +1,17 @@
+{% extends 'ex04/base.html' %}
+{% block title %}
+<title>Ex04: SQL - Data deleting - remove</title>
+{% endblock %}
+{% block content %}
+<div id="content">
+	<form action="" method="post">
+		{% csrf_token %}
+		<select name="episode_nb" id="episode_nb">
+			{% for r in results %}
+			<option value="{{ r.episode_nb }}">{{ r.title }}</option>
+			{% endfor %}
+		</select>
+		<input type="submit" name="remove" value="Delete film">
+	</form>
+</div>
+{% endblock %}

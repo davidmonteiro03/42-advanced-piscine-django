@@ -1,0 +1,18 @@
+{% extends 'ex06/base.html' %}
+{% block title %}
+<title>Ex06: SQL - Updating a data - update</title>
+{% endblock %}
+{% block content %}
+<div id="content">
+	<form action="" method="post">
+		{% csrf_token %}
+		<select name="episode_nb" id="episode_nb">
+			{% for r in results %}
+			<option value="{{ r.episode_nb }}">{{ r.title }}</option>
+			{% endfor %}
+		</select>
+		<input type="text" name="opening_crawl" id="opening_crawl">
+		<input type="submit" name="update" value="Update film">
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'ex05/base.html' %}
+{% block title %}
+<title>Ex05: ORM - Deleting data - display</title>
+{% endblock %}
+{% block style %}
+<style>
+	table,
+	tr,
+	td,
+	th {
+		border: 1px solid;
+		border-collapse: collapse;
+	}
+
+	td,
+	th {
+		padding: 5px 10px;
+	}
+</style>
+{% endblock %}
+{% block content %}
+<div id="content">
+	<table>
+		{% if columns %}
+		<thead>
+			<tr>
+				{% for col in columns %}
+				<th>
+					{% if col %}
+					{{ col }}
+					{% endif %}
+				</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		{% endif %}
+		{% if results %}
+		<tbody>
+			{% for res in results %}
+			<tr>
+				{% for v in res.values %}
+				<td>
+					{% if v %}
+					{{ v }}
+					{% endif %}
+				</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</tbody>
+		{% endif %}
+	</table>
+</div>
+{% endblock %}
