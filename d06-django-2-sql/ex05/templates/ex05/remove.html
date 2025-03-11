@@ -6,11 +6,12 @@
 <div id="content">
 	<form action="" method="post">
 		{% csrf_token %}
-		<select name="episode_nb" id="episode_nb">
+		<label for="episode_nb">Episode number</label>
+		<select name="episode_nb" id="episode_nb" required>
 			{% for r in results %}
 			<option value="{{ r.episode_nb }}">{{ r.title }}</option>
 			{% endfor %}
-		</select>
+		</select><br>
 		<input type="submit" name="remove" value="Delete film">
 	</form>
 </div>

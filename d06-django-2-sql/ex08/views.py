@@ -34,22 +34,43 @@ homeworld VARCHAR(64) REFERENCES ex08_planets(name));""")
         return HttpResponse(e)
 
 
-def read_planets_csv(file_path, exclude):
+def read_csv(file_path, table_name):
     with connection.cursor() as cursor:
-        cursor.execute("""SELECT * FROM ex08_planets;""")
-        keys = [desc.name for desc in cursor.description if desc.name not in exclude]
+        cursor.execute("""SELECT * FROM {table_name};""".format(table_name=table_name))
+        columns = ", ".join([desc.name for desc in cursor.description if desc.name != 'id'])
         with open(file_path, 'r') as file:
-            for line in file.readlines():
-                values = line.strip().split()
-                _dict = {}
-                for k, v in zip(keys, values):
-                    _dict[k] = v
+            cursor.copy_expert("""\
+COPY {table_name} ({columns}) FROM STDIN WITH (FORMAT CSV, DELIMITER E'\\t', HEADER FALSE, NULL 'NULL');""".format(table_name=table_name, columns=columns), file)
 
 
 def populate(request):
     try:
-        read_planets_csv(settings.BASE_DIR / 'ex08' / 'planets.csv', ['id'])
-        # read_people_csv(settings.BASE_DIR / 'ex08' / 'people.csv')
+        read_csv(settings.BASE_DIR / 'ex08' / 'planets.csv', 'ex08_planets')
+        read_csv(settings.BASE_DIR / 'ex08' / 'people.csv', 'ex08_people')
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
+
+
+def display(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""\
+SELECT ex08_people.name, ex08_people.homeworld, ex08_planets.climate FROM ex08_people
+JOIN ex08_planets ON ex08_people.homeworld=ex08_planets.name
+WHERE ex08_planets.climate LIKE '%windy%'
+ORDER BY ex08_people.name;""")
+            columns = [desc[0] for desc in cursor.description]
+            fetched = cursor.fetchall()
+            if len(fetched) < 1:
+                return HttpResponse("No data available")
+            results = []
+            for _ in fetched:
+                _dict = {}
+                for __ in range(len(columns)):
+                    _dict[columns[__]] = _[__]
+                results.append(_dict)
+        return render(request, 'ex08/display.html', context={'columns': columns,
+                                                             'results': results})
+    except:
+        return HttpResponse("No data available")

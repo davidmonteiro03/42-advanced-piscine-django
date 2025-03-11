@@ -117,7 +117,7 @@ WHERE episode_nb={episode_nb};""".format(episode_nb=request.POST['episode_nb'], 
         return redirect('/ex06/update')
     try:
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT * FROM ex06_movies""")
+            cursor.execute("""SELECT * FROM ex06_movies;""")
             columns = [desc[0] for desc in cursor.description]
             fetched = cursor.fetchall()
             if len(fetched) < 1:

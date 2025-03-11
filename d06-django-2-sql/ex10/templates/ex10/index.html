@@ -1,0 +1,64 @@
+{% extends 'ex10/base.html' %}
+{% block title %}
+<title>Ex10: ORM - Many to Many</title>
+{% endblock %}
+{% block style %}
+<style>
+	table,
+	tr,
+	td,
+	th {
+		border: 1px solid;
+		border-collapse: collapse;
+	}
+
+	td,
+	th {
+		padding: 5px 10px;
+	}
+</style>
+{% endblock %}
+{% block content %}
+<div id="content">
+	<form action="" method="get">
+		<label for="movies_minimum_release_date">Movies minimum release date</label>
+		<input type="date" name="movies_minimum_release_date" id="movies_minimum_release_date" required><br>
+		<label for="movies_maximum_release_date">Movies maximum release date</label>
+		<input type="date" name="movies_maximum_release_date" id="movies_maximum_release_date" required><br>
+		<label for="planet_diameter_greater_than">Planet diameter greater than</label>
+		<input type="number" name="planet_diameter_greater_than" id="planet_diameter_greater_than" required><br>
+		<label for="character_gender">Character gender</label>
+		<select name="character_gender" id="character_gender" required>
+			{% for g in genders %}
+			<option value="{{ g }}">{{ g }}</option>
+			{% endfor %}
+		</select><br>
+		<input type="submit" name="search" value="Search">
+	</form>
+	{% if results %}
+	<h2>Results</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>movie_title</th>
+				<th>character_name</th>
+				<th>character_gender</th>
+				<th>homeworld_name</th>
+				<th>homeworld_diameter</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for res in results %}
+			<tr>
+				<td>{{ res.movie_title }}</td>
+				<td>{{ res.character_name }}</td>
+				<td>{{ res.character_gender }}</td>
+				<td>{{ res.homeworld_name }}</td>
+				<td>{{ res.homeworld_diameter }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+</div>
+{% endblock %}
