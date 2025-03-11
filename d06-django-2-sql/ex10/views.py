@@ -5,7 +5,10 @@ from datetime import datetime
 
 # Create your views here.
 def index(request):
+    init_data_cmd = "python manage.py loaddata ex10/ex10_initial_data.json"
     characters = People.objects.all()
+    if len(characters) < 1:
+        return HttpResponse(f"No data available, please use the following command line before use: {init_data_cmd}")
     genders = []
     for c in characters:
         if c.gender in genders:
