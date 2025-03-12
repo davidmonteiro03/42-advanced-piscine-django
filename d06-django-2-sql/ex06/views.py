@@ -14,8 +14,8 @@ opening_crawl TEXT,
 director VARCHAR(32) NOT NULL,
 producer VARCHAR(128) NOT NULL,
 release_date DATE NOT NULL,
-updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);""")
+created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);""")
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
