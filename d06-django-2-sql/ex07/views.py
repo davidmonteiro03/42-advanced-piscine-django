@@ -92,7 +92,7 @@ def update(request):
             pass
         return redirect('/ex07/update')
     try:
-        fetched = Movies.objects.all()
+        fetched = Movies.objects.all().order_by('episode_nb')
         results = [model_to_dict(_) for _ in fetched]
         if len(results) < 1:
             return HttpResponse("No data available")

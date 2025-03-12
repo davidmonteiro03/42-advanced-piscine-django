@@ -113,7 +113,7 @@ DELETE FROM ex04_movies WHERE episode_nb={episode_nb};""".format(episode_nb=requ
         return redirect('/ex04/remove')
     try:
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT * FROM ex04_movies;""")
+            cursor.execute("""SELECT * FROM ex04_movies ORDER BY episode_nb;""")
             columns = [desc[0] for desc in cursor.description]
             fetched = cursor.fetchall()
             if len(fetched) < 1:
