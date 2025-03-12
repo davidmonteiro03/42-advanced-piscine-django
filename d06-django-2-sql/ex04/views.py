@@ -76,7 +76,7 @@ def populate(request):
             for ep in episodes:
                 cursor.execute("""\
 INSERT INTO ex04_movies (episode_nb, title, director, producer, release_date) \
-VALUES ({episode_nb}, '{title}', '{director}', '{producer}', '{release_date}');""".format(**ep))
+VALUES (%(episode_nb)s, %(title)s, %(director)s, %(producer)s, %(release_date)s);""", ep)
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
@@ -107,7 +107,7 @@ def remove(request):
         try:
             with connection.cursor() as cursor:
                 cursor.execute("""\
-DELETE FROM ex04_movies WHERE episode_nb={episode_nb};""".format(episode_nb=request.POST['episode_nb']))
+DELETE FROM ex04_movies WHERE episode_nb=%s;""", [request.POST['episode_nb']])
         except:
             pass
         return redirect('/ex04/remove')

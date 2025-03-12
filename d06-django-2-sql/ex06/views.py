@@ -78,7 +78,7 @@ def populate(request):
             for ep in episodes:
                 cursor.execute("""\
 INSERT INTO ex06_movies (episode_nb, title, director, producer, release_date) \
-VALUES ({episode_nb}, '{title}', '{director}', '{producer}', '{release_date}');""".format(**ep))
+VALUES (%(episode_nb)s, %(title)s, %(director)s, %(producer)s, %(release_date)s);""", ep)
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
@@ -110,8 +110,8 @@ def update(request):
             with connection.cursor() as cursor:
                 cursor.execute("""\
 UPDATE ex06_movies \
-SET opening_crawl='{opening_crawl}' \
-WHERE episode_nb={episode_nb};""".format(episode_nb=request.POST['episode_nb'], opening_crawl=request.POST['opening_crawl']))
+SET opening_crawl=%s \
+WHERE episode_nb=%s;""", [request.POST['opening_crawl'], request.POST['episode_nb']])
         except:
             pass
         return redirect('/ex06/update')

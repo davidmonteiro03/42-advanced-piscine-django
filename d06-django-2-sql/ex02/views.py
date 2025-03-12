@@ -76,7 +76,7 @@ def populate(request):
             for ep in episodes:
                 cursor.execute("""\
 INSERT INTO ex02_movies (episode_nb, title, director, producer, release_date) \
-VALUES ({episode_nb}, '{title}', '{director}', '{producer}', '{release_date}');""".format(**ep))
+VALUES (%(episode_nb)s, %(title)s, %(director)s, %(producer)s, %(release_date)s);""", ep)
         return HttpResponse("OK")
     except Exception as e:
         return HttpResponse(e)
