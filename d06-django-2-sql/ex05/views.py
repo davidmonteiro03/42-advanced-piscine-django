@@ -57,9 +57,14 @@ def populate(request):
                 'release_date': "2015-12-11",
             },
         ]
+        output = ""
         for ep in episodes:
-            Movies.objects.create(**ep)
-        return HttpResponse("OK")
+            try:
+                Movies.objects.create(**ep)
+                output += "OK<br>"
+            except Exception as e:
+                output += str(e) + "<br>"
+        return HttpResponse(output)
     except Exception as e:
         return HttpResponse(e)
 
