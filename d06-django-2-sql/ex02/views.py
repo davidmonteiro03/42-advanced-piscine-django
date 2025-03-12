@@ -85,7 +85,7 @@ VALUES ({episode_nb}, '{title}', '{director}', '{producer}', '{release_date}');"
 def display(request):
     try:
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT * FROM ex02_movies;""")
+            cursor.execute("""SELECT * FROM ex02_movies ORDER BY episode_nb;""")
             columns = [desc[0] for desc in cursor.description]
             fetched = cursor.fetchall()
             if len(fetched) < 1:

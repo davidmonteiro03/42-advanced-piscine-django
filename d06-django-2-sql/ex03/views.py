@@ -66,7 +66,7 @@ def populate(request):
 
 def display(request):
     try:
-        fetched = Movies.objects.all()
+        fetched = Movies.objects.all().order_by('episode_nb')
         columns = [_.name for _ in list(Movies._meta.fields)]
         results = []
         for _ in fetched:
