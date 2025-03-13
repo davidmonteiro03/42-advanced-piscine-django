@@ -77,7 +77,7 @@ def populate(request):
             for ep in episodes:
                 try:
                     cursor.execute("""\
-INSERT INTO ex02_movies (episode_nb, title, director, producer, release_date) \
+INSERT INTO ex04_movies (episode_nb, title, director, producer, release_date) \
 VALUES (%(episode_nb)s, %(title)s, %(director)s, %(producer)s, %(release_date)s);""", ep)
                     output += "OK<br>"
                 except Exception as e:
