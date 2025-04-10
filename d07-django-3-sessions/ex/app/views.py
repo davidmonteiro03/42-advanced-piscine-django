@@ -3,11 +3,12 @@ from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from . import forms
+from .models import Tip
 import ex.settings as settings
 import datetime
 import random
 
-# Create your views here.
+
 def generate_random_user_name(request: HttpRequest) -> tuple[str, int]:
     DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
     session_expiry = settings.SESSION_EXPIRY + 1
@@ -37,6 +38,8 @@ def index(request: HttpRequest) -> HttpResponse:
             del request.session['user_name']
         if request.session.get(key='timestamp'):
             del request.session['timestamp']
+        context['form'] = forms.TipForm()
+        context['tips'] = Tip.objects.filter(author=request.user).all()
     else:
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
@@ -111,4 +114,20 @@ def login(request: HttpRequest) -> HttpResponse:
 def logout(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         auth_logout(request=request)
+    return redirect(to="/")
+
+
+def create_tip(request: HttpRequest) -> HttpResponse:
+    context = {}
+    if request.user.is_authenticated:
+        if request.POST:
+            form = forms.TipForm(data=request.POST)
+            if form.is_valid():
+                Tip.objects.create(content=form.cleaned_data.get('content'),
+                                   author=request.user)
+                return redirect(to="/")
+            context['form'] = form
+        return render(request=request,
+                      template_name="app/index.html",
+                      context=context)
     return redirect(to="/")

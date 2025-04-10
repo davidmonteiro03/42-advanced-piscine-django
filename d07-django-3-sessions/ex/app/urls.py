@@ -10,4 +10,6 @@ urlpatterns = [
          view=views.login),
     re_path(route=r"^logout/?$",
          view=views.logout),
+    re_path(route=r"^create-tip/?$",
+         view=views.create_tip),
 ]
