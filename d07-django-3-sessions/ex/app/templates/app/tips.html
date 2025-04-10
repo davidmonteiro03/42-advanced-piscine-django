@@ -10,11 +10,11 @@
         </thead>
         <tbody>
             {% for t in tips %}
-            <tr>
-                <td>{{ t.author.username }}</td>
-                <td>{{ t.content }}</td>
-                <td>{{ t.date }}</td>
-            </tr>
+                <tr>
+                    <td>{{ t.author.username }}</td>
+                    <td>{{ t.content }}</td>
+                    <td>{{ t.date }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
