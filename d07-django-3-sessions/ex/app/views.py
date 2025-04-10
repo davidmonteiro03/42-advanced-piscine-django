@@ -3,27 +3,32 @@ from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from . import forms
-import ex.settings as set
+import ex.settings as settings
 import datetime
 import random
 
 # Create your views here.
-def generate_random_user_name(request: HttpRequest) -> str:
-    _format = "%Y-%m-%d %H:%M:%S.%f"
-    if not request.session.get(key='user_name'):
-        request.session['user_name'] = random.choice(set.USERNAMES)
-    if not request.session.get(key='timestamp'):
+def generate_random_user_name(request: HttpRequest) -> tuple[str, int]:
+    DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+    session_expiry = settings.SESSION_EXPIRY + 1
+    if not request.session.get(key='user_name') or not request.session.get(key='timestamp'):
+        request.session['user_name'] = random.choice(settings.USERNAMES)
         request.session['timestamp'] = datetime.datetime.strftime(datetime.datetime.now(),
-                                                                  _format)
-    _old_time = datetime.datetime.strptime(request.session['timestamp'],
-                                           _format)
-    _now_time = datetime.datetime.now()
-    if (_now_time - _old_time).seconds > set.SESSION_EXPIRY:
-        request.session['user_name'] = random.choice(seq=[u for u in set.USERNAMES
-                                                          if u != request.session['user_name']])
-        request.session['timestamp'] = datetime.datetime.strftime(datetime.datetime.now(),
-                                                                  _format)
-    return request.session['user_name']
+                                                                  DATE_FORMAT)
+    else:
+        old_time = datetime.datetime.strptime(request.session['timestamp'],
+                                              DATE_FORMAT)
+        current_time = datetime.datetime.now()
+        diff_time = current_time - old_time
+        if diff_time.seconds >= settings.SESSION_EXPIRY:
+            request.session['user_name'] = random.choice(seq=[u for u in settings.USERNAMES
+                                                              if u != request.session['user_name']])
+            request.session['timestamp'] = datetime.datetime.strftime(datetime.datetime.now(),
+                                                                      DATE_FORMAT)
+        else:
+            session_expiry = settings.SESSION_EXPIRY - diff_time.seconds + 1
+    return request.session['user_name'], session_expiry
+
 
 def index(request: HttpRequest) -> HttpResponse:
     context = {}
@@ -33,8 +38,7 @@ def index(request: HttpRequest) -> HttpResponse:
         if request.session.get(key='timestamp'):
             del request.session['timestamp']
     else:
-        context['user_name'] = generate_random_user_name(request=request)
-        context['session_expiry'] = set.SESSION_EXPIRY
+        context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
                   template_name="app/index.html",
                   context=context)
@@ -63,10 +67,10 @@ def register(request: HttpRequest) -> HttpResponse:
                            user=user)
                 return redirect(to="/")
         context['form'] = form
-        context['user_name'] = generate_random_user_name(request=request)
+        context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     else:
         context['form'] = forms.RegistrationForm()
-        context['user_name'] = generate_random_user_name(request=request)
+        context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
                   template_name="app/register.html",
                   context=context)
@@ -95,10 +99,10 @@ def login(request: HttpRequest) -> HttpResponse:
                            user=user)
                 return redirect(to="/")
         context['form'] = form
-        context['user_name'] = generate_random_user_name(request=request)
+        context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     else:
         context['form'] = forms.LoginForm()
-        context['user_name'] = generate_random_user_name(request=request)
+        context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
                   template_name="app/login.html",
                   context=context)

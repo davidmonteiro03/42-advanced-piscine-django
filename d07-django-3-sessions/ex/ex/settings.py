@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 SESSION_EXPIRY = 42
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 
 # Application definition
@@ -129,7 +130,7 @@ USERNAMES = [
     'dcaetano',
     'student',
     'mastermind',
-    'writerssoul',
+    'writers_soul',
     'philanthropist',
     'learner',
     'member',
