@@ -138,3 +138,5 @@ USERNAMES = [
     'programmer',
     'developer',
 ]
+
+AUTH_USER_MODEL = 'app.CustomUser'

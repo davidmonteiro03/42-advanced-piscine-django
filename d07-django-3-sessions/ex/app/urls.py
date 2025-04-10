@@ -12,4 +12,10 @@ urlpatterns = [
          view=views.logout),
     re_path(route=r"^create-tip/?$",
          view=views.create_tip),
+    re_path(route=r"^delete-tip/?$",
+         view=views.delete_tip),
+    re_path(route=r"^upvote-tip/?$",
+         view=views.upvote_tip),
+    re_path(route=r"^downvote-tip/?$",
+         view=views.downvote_tip),
 ]

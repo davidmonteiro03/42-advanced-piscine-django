@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.forms.models import model_to_dict
 from . import forms
-from .models import Tip
+from .models import CustomUser, Tip
 import ex.settings as settings
 import datetime
 import random
+import copy
 
 
 def generate_random_user_name(request: HttpRequest) -> tuple[str, int]:
@@ -32,6 +33,7 @@ def generate_random_user_name(request: HttpRequest) -> tuple[str, int]:
 
 
 def index(request: HttpRequest) -> HttpResponse:
+    DATE_FORMAT = "%d %B %Y"
     context = {}
     if request.user.is_authenticated:
         if request.session.get(key='user_name'):
@@ -39,7 +41,22 @@ def index(request: HttpRequest) -> HttpResponse:
         if request.session.get(key='timestamp'):
             del request.session['timestamp']
         context['form'] = forms.TipForm()
-        context['tips'] = Tip.objects.filter(author=request.user).all()
+        context['tips'] = []
+        tips = copy.deepcopy(Tip.objects.all())
+        for t in tips:
+            t_dict = {}
+            t_dict['id'] = t.id
+            t_dict['content'] = t.content
+            t_dict['author'] = t.author
+            t_dict['date'] = t.date.strftime(DATE_FORMAT)
+            t_dict['num_up_votes'] = len(t.upvotes.all())
+            t_dict['num_down_votes'] = len(t.downvotes.all())
+            t.date = t.date.strftime(DATE_FORMAT)
+            if not any([uv == request.user for uv in t.upvotes.all()]):
+                t_dict['can_upvote'] = "upvote"
+            elif not any([uv == request.user for uv in t.downvotes.all()]):
+                t_dict['can_downvote'] = "downvote"
+            context['tips'].append(t_dict)
     else:
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
@@ -57,15 +74,15 @@ def register(request: HttpRequest) -> HttpResponse:
             user_name = form.cleaned_data.get('user_name')
             password = form.cleaned_data.get('password')
             password_confirmation = form.cleaned_data.get('password_confirmation')
-            if User.objects.filter(username=user_name).exists():
+            if CustomUser.objects.filter(username=user_name).exists():
                 form.add_error(field='user_name',
                                error="User already exists.")
             elif password != password_confirmation:
                 form.add_error(field='password',
                                error="Passwords don't match.")
             else:
-                user =  User.objects.create_user(username=user_name,
-                                                 password=password)
+                user = CustomUser.objects.create_user(username=user_name,
+                                                      password=password)
                 auth_login(request=request,
                            user=user)
                 return redirect(to="/")
@@ -91,7 +108,7 @@ def login(request: HttpRequest) -> HttpResponse:
             user = authenticate(request=request,
                                 username=user_name,
                                 password=password)
-            if not User.objects.filter(username=user_name).exists():
+            if not CustomUser.objects.filter(username=user_name).exists():
                 form.add_error(field="user_name",
                                error="User doesn't exist.")
             elif not user:
@@ -127,6 +144,53 @@ def create_tip(request: HttpRequest) -> HttpResponse:
                                    author=request.user)
                 return redirect(to="/")
             context['form'] = form
+        return render(request=request,
+                      template_name="app/index.html",
+                      context=context)
+    return redirect(to="/")
+
+
+def delete_tip(request: HttpRequest) -> HttpResponse:
+    context = {}
+    if request.user.is_authenticated:
+        if request.POST:
+            tip_id = request.POST.get(key="tip_id")
+            tip = Tip.objects.filter(id=tip_id).first()
+            if tip:
+                tip.delete()
+            return redirect(to="/")
+        return render(request=request,
+                      template_name="app/index.html",
+                      context=context)
+    return redirect(to="/")
+
+
+def upvote_tip(request: HttpRequest) -> HttpResponse:
+    context = {}
+    if request.user.is_authenticated:
+        if request.POST:
+            tip_id = request.POST.get(key="tip_id")
+            tip = Tip.objects.filter(id=tip_id).first()
+            if tip:
+                tip.downvotes.remove(request.user)
+                tip.upvotes.add(request.user)
+            return redirect(to="/")
+        return render(request=request,
+                      template_name="app/index.html",
+                      context=context)
+    return redirect(to="/")
+
+
+def downvote_tip(request: HttpRequest) -> HttpResponse:
+    context = {}
+    if request.user.is_authenticated:
+        if request.POST:
+            tip_id = request.POST.get(key="tip_id")
+            tip = Tip.objects.filter(id=tip_id).first()
+            if tip:
+                tip.upvotes.remove(request.user)
+                tip.downvotes.add(request.user)
+            return redirect(to="/")
         return render(request=request,
                       template_name="app/index.html",
                       context=context)
