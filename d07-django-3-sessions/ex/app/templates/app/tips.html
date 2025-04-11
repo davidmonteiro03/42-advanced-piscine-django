@@ -6,19 +6,19 @@
             <pre style="font-size: 16px" class="text-secondary text-wrap text-truncate m-0 mt-1">{{ t.content }}</pre>
             <pre style="font-size: 14px" class="m-0 mt-1">by {{ t.author.username }}, {{ t.date }}</pre>
             <div class="d-flex flex-row mt-2">
-				{% if t.can_upvote %}
-					<form action="/upvote-tip" method="post">
-						{% csrf_token %}
-						<input type="hidden" name="tip_id" value="{{ t.id }}">
-						{% bootstrap_button button_type="submit" extra_classes="btn-success" content="Upvote Tip" %}
-					</form>
-				{% elif t.can_downvote %}
-					<form action="/downvote-tip" method="post">
-						{% csrf_token %}
-						<input type="hidden" name="tip_id" value="{{ t.id }}">
-						{% bootstrap_button button_type="submit" extra_classes="btn-danger" content="Downvote Tip" %}
-					</form>
-				{% endif %}
+                {% if t.can_upvote %}
+                    <form action="/upvote-tip" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="tip_id" value="{{ t.id }}">
+                        {% bootstrap_button button_type="submit" extra_classes="btn-success" content="Upvote Tip" %}
+                    </form>
+                {% elif t.can_downvote %}
+                    <form action="/downvote-tip" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="tip_id" value="{{ t.id }}">
+                        {% bootstrap_button button_type="submit" extra_classes="btn-danger" content="Downvote Tip" %}
+                    </form>
+                {% endif %}
                 <form action="/delete-tip" method="post" class="ms-2">
                     {% csrf_token %}
                     <input type="hidden" name="tip_id" value="{{ t.id }}">

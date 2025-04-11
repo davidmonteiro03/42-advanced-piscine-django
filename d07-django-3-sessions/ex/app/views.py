@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.forms.models import model_to_dict
 from . import forms
 from .models import CustomUser, Tip
 import ex.settings as settings
