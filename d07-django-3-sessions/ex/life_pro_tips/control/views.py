@@ -39,6 +39,7 @@ def index(request: HttpRequest) -> HttpResponse:
             del request.session['user_name']
         if request.session.get(key='timestamp'):
             del request.session['timestamp']
+        custom_user = CustomUser.objects.filter(username=request.user.username).first()
         context['form'] = forms.TipForm()
         context['tips'] = []
         tips = copy.deepcopy(Tip.objects.all())
@@ -50,11 +51,10 @@ def index(request: HttpRequest) -> HttpResponse:
             t_dict['date'] = t.date.strftime(DATE_FORMAT)
             t_dict['num_up_votes'] = len(t.upvotes.all())
             t_dict['num_down_votes'] = len(t.downvotes.all())
-            t.date = t.date.strftime(DATE_FORMAT)
-            if not any([uv == request.user for uv in t.upvotes.all()]):
-                t_dict['can_upvote'] = "upvote"
-            elif not any([uv == request.user for uv in t.downvotes.all()]):
-                t_dict['can_downvote'] = "downvote"
+            t_dict['can_delete_tip'] = t.author == custom_user or custom_user.is_staff
+            t_dict['can_upvote_tip'] = not any([uv == custom_user for uv in t.upvotes.all()])
+            t_dict['can_downvote_tip'] = not any([dv == custom_user for dv in t.downvotes.all()]) and \
+                (t.author == custom_user or custom_user.can_downvote_tips)
             context['tips'].append(t_dict)
     else:
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
@@ -152,10 +152,11 @@ def create_tip(request: HttpRequest) -> HttpResponse:
 def delete_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
-        if request.POST:
+        custom_user = CustomUser.objects.filter(username=request.user.username).first()
+        if request.POST and custom_user:
             tip_id = request.POST.get(key="tip_id")
             tip = Tip.objects.filter(id=tip_id).first()
-            if tip:
+            if tip and (custom_user.is_staff or tip.author == custom_user):
                 tip.delete()
             return redirect(to="/")
         return render(request=request,
@@ -167,12 +168,13 @@ def delete_tip(request: HttpRequest) -> HttpResponse:
 def upvote_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
-        if request.POST:
+        custom_user = CustomUser.objects.filter(username=request.user.username).first()
+        if request.POST and custom_user:
             tip_id = request.POST.get(key="tip_id")
             tip = Tip.objects.filter(id=tip_id).first()
             if tip:
-                tip.downvotes.remove(request.user)
-                tip.upvotes.add(request.user)
+                tip.downvotes.remove(custom_user)
+                tip.upvotes.add(custom_user)
             return redirect(to="/")
         return render(request=request,
                       template_name="control/index.html",
@@ -183,12 +185,13 @@ def upvote_tip(request: HttpRequest) -> HttpResponse:
 def downvote_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
-        if request.POST:
+        custom_user = CustomUser.objects.filter(username=request.user.username).first()
+        if request.POST and custom_user:
             tip_id = request.POST.get(key="tip_id")
             tip = Tip.objects.filter(id=tip_id).first()
-            if tip:
-                tip.upvotes.remove(request.user)
-                tip.downvotes.add(request.user)
+            if tip and (custom_user.can_downvote_tips or tip.author == custom_user):
+                tip.upvotes.remove(custom_user)
+                tip.downvotes.add(custom_user)
             return redirect(to="/")
         return render(request=request,
                       template_name="control/index.html",

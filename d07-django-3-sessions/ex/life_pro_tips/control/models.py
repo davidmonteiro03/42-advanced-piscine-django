@@ -3,7 +3,15 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
-    pass
+    can_downvote_tips = models.BooleanField(verbose_name='downvote permission',
+                                            blank=False,
+                                            null=False,
+                                            default=False)
+
+    def save(self, *args, **kwargs):
+        if self.is_superuser:
+            self.can_downvote_tips = True
+        super().save(*args, **kwargs)
 
 
 class Tip(models.Model):
@@ -13,7 +21,7 @@ class Tip(models.Model):
     author = models.ForeignKey(to=CustomUser,
                                on_delete=models.CASCADE,
                                editable=False)
-    date = models.DateField(verbose_name='content',
+    date = models.DateField(verbose_name='date',
                             auto_now_add=True,
                             blank=False,
                             null=False,
