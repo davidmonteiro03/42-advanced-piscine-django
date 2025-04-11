@@ -3,7 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from . import forms
 from .models import CustomUser, Tip
-import ex.settings as settings
+import life_pro_tips.settings as settings
 import datetime
 import random
 import copy
@@ -59,7 +59,7 @@ def index(request: HttpRequest) -> HttpResponse:
     else:
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
-                  template_name="app/index.html",
+                  template_name="control/index.html",
                   context=context)
 
 
@@ -91,7 +91,7 @@ def register(request: HttpRequest) -> HttpResponse:
         context['form'] = forms.RegistrationForm()
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
-                  template_name="app/register.html",
+                  template_name="control/register.html",
                   context=context)
 
 
@@ -123,7 +123,7 @@ def login(request: HttpRequest) -> HttpResponse:
         context['form'] = forms.LoginForm()
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
     return render(request=request,
-                  template_name="app/login.html",
+                  template_name="control/login.html",
                   context=context)
 
 
@@ -144,7 +144,7 @@ def create_tip(request: HttpRequest) -> HttpResponse:
                 return redirect(to="/")
             context['form'] = form
         return render(request=request,
-                      template_name="app/index.html",
+                      template_name="control/index.html",
                       context=context)
     return redirect(to="/")
 
@@ -159,7 +159,7 @@ def delete_tip(request: HttpRequest) -> HttpResponse:
                 tip.delete()
             return redirect(to="/")
         return render(request=request,
-                      template_name="app/index.html",
+                      template_name="control/index.html",
                       context=context)
     return redirect(to="/")
 
@@ -175,7 +175,7 @@ def upvote_tip(request: HttpRequest) -> HttpResponse:
                 tip.upvotes.add(request.user)
             return redirect(to="/")
         return render(request=request,
-                      template_name="app/index.html",
+                      template_name="control/index.html",
                       context=context)
     return redirect(to="/")
 
@@ -191,6 +191,6 @@ def downvote_tip(request: HttpRequest) -> HttpResponse:
                 tip.downvotes.add(request.user)
             return redirect(to="/")
         return render(request=request,
-                      template_name="app/index.html",
+                      template_name="control/index.html",
                       context=context)
     return redirect(to="/")

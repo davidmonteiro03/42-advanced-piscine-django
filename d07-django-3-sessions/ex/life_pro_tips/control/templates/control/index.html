@@ -1,4 +1,4 @@
-{% extends "app/base.html" %}
+{% extends "control/base.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
     {% if user.is_authenticated %}
@@ -7,6 +7,6 @@
             {% bootstrap_form form %}
             {% bootstrap_button button_type="submit" content="Create Tip" %}
         </form>
-        {% include "app/tips.html" %}
+        {% include "control/tips.html" %}
     {% endif %}
 {% endblock content %}

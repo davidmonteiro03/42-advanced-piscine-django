@@ -1,5 +1,5 @@
 """
-URL configuration for ex project.
+URL configuration for life_pro_tips project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -18,5 +18,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path(route="",
-         view=include("app.urls")),
+         view=include("control.urls")),
 ]
