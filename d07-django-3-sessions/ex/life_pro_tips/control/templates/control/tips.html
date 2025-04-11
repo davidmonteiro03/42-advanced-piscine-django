@@ -4,7 +4,7 @@
         <div class="d-flex flex-column border-top my-3">
             <pre style="font-size: 20px" class="m-0 mt-2">Upvotes: {{ t.num_up_votes }} | Downvotes: {{ t.num_down_votes }}</pre>
             <pre style="font-size: 16px" class="text-secondary text-wrap text-truncate m-0 mt-1">{{ t.content }}</pre>
-            <pre style="font-size: 14px" class="m-0 mt-1">by {{ t.author.username }}, {{ t.date }}</pre>
+            <pre style="font-size: 14px" class="m-0 mt-1">by {{ t.author.username }} ({{ t.role }}), {{ t.date }}</pre>
             <div class="d-flex flex-row mt-2">
                 {% if t.can_upvote_tip %}
                     <form action="/upvote-tip" method="post" class="mx-1">

@@ -7,4 +7,5 @@ from .models import CustomUser
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Personalized permissions', {'fields': ('can_downvote_tips',)}),
+        ('Reputation points', {'fields': ('rep_points',)}),
     )

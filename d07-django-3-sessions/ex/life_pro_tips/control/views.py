@@ -39,7 +39,7 @@ def index(request: HttpRequest) -> HttpResponse:
             del request.session['user_name']
         if request.session.get(key='timestamp'):
             del request.session['timestamp']
-        custom_user = CustomUser.objects.filter(username=request.user.username).first()
+        logged_user = CustomUser.objects.filter(username=request.user.username).first()
         context['form'] = forms.TipForm()
         context['tips'] = []
         tips = copy.deepcopy(Tip.objects.all())
@@ -51,10 +51,18 @@ def index(request: HttpRequest) -> HttpResponse:
             t_dict['date'] = t.date.strftime(DATE_FORMAT)
             t_dict['num_up_votes'] = len(t.upvotes.all())
             t_dict['num_down_votes'] = len(t.downvotes.all())
-            t_dict['can_delete_tip'] = t.author == custom_user or custom_user.is_staff
-            t_dict['can_upvote_tip'] = not any([uv == custom_user for uv in t.upvotes.all()])
-            t_dict['can_downvote_tip'] = not any([dv == custom_user for dv in t.downvotes.all()]) and \
-                (t.author == custom_user or custom_user.can_downvote_tips)
+            t_dict['can_delete_tip'] = t.author == logged_user or logged_user.is_staff
+            t_dict['can_upvote_tip'] = not any([uv == logged_user for uv in t.upvotes.all()])
+            t_dict['can_downvote_tip'] = not any([dv == logged_user for dv in t.downvotes.all()]) and \
+                (t.author == logged_user or logged_user.can_downvote_tips)
+            if t.author.is_superuser:
+                t_dict['role'] = settings.SUPERUSER_ROLE
+            elif t.author.is_staff:
+                t_dict['role'] = settings.DELETE_TIPS_ROLE
+            elif t.author.can_downvote_tips:
+                t_dict['role'] = settings.DOWNVOTE_TIPS_ROLE
+            else:
+                t_dict['role'] = settings.COMMON_USER_ROLE
             context['tips'].append(t_dict)
     else:
         context['user_name'], context['session_expiry'] = generate_random_user_name(request=request)
@@ -136,11 +144,13 @@ def logout(request: HttpRequest) -> HttpResponse:
 def create_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
+        logged_user = CustomUser.objects.filter(username=request.user.username).first()
         if request.POST:
             form = forms.TipForm(data=request.POST)
             if form.is_valid():
                 Tip.objects.create(content=form.cleaned_data.get('content'),
-                                   author=request.user)
+                                   author=logged_user)
+                logged_user.save()
                 return redirect(to="/")
             context['form'] = form
         return render(request=request,
@@ -152,12 +162,13 @@ def create_tip(request: HttpRequest) -> HttpResponse:
 def delete_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
-        custom_user = CustomUser.objects.filter(username=request.user.username).first()
-        if request.POST and custom_user:
+        logged_user = CustomUser.objects.filter(username=request.user.username).first()
+        if request.POST and logged_user:
             tip_id = request.POST.get(key="tip_id")
             tip = Tip.objects.filter(id=tip_id).first()
-            if tip and (custom_user.is_staff or tip.author == custom_user):
+            if tip and (logged_user.is_staff or tip.author == logged_user):
                 tip.delete()
+                logged_user.save()
             return redirect(to="/")
         return render(request=request,
                       template_name="control/index.html",
@@ -168,13 +179,14 @@ def delete_tip(request: HttpRequest) -> HttpResponse:
 def upvote_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
-        custom_user = CustomUser.objects.filter(username=request.user.username).first()
-        if request.POST and custom_user:
+        logged_user = CustomUser.objects.filter(username=request.user.username).first()
+        if request.POST and logged_user:
             tip_id = request.POST.get(key="tip_id")
             tip = Tip.objects.filter(id=tip_id).first()
             if tip:
-                tip.downvotes.remove(custom_user)
-                tip.upvotes.add(custom_user)
+                tip.downvotes.remove(logged_user)
+                tip.upvotes.add(logged_user)
+                tip.author.save()
             return redirect(to="/")
         return render(request=request,
                       template_name="control/index.html",
@@ -185,13 +197,14 @@ def upvote_tip(request: HttpRequest) -> HttpResponse:
 def downvote_tip(request: HttpRequest) -> HttpResponse:
     context = {}
     if request.user.is_authenticated:
-        custom_user = CustomUser.objects.filter(username=request.user.username).first()
-        if request.POST and custom_user:
+        logged_user = CustomUser.objects.filter(username=request.user.username).first()
+        if request.POST and logged_user:
             tip_id = request.POST.get(key="tip_id")
             tip = Tip.objects.filter(id=tip_id).first()
-            if tip and (custom_user.can_downvote_tips or tip.author == custom_user):
-                tip.upvotes.remove(custom_user)
-                tip.downvotes.add(custom_user)
+            if tip and (logged_user.can_downvote_tips or tip.author == logged_user):
+                tip.upvotes.remove(logged_user)
+                tip.downvotes.add(logged_user)
+                tip.author.save()
             return redirect(to="/")
         return render(request=request,
                       template_name="control/index.html",
