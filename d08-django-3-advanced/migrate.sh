@@ -9,5 +9,3 @@ runcmd()
 
 runcmd "Making migrations"   python3 manage.py makemigrations control
 runcmd "Applying migrations" python3 manage.py migrate
-runcmd "Creating users"      python3 manage.py loaddata control/users.json
-runcmd "Creating articles"   python3 manage.py loaddata control/articles.json

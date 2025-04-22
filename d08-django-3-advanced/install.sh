@@ -9,6 +9,6 @@ runcmd()
 
 runcmd "Creating database container"                    docker-compose up --build -d
 runcmd "Creating virtual environment"                   python3 -m venv virtualenv
-runcmd "Activating virtual environment"                 source virtualenv/bin/activate
+runcmd "Activating virtual environment"                 . virtualenv/bin/activate
 runcmd "Upgrading pip package installer"                python3 -m pip install --upgrade pip
 runcmd "Installing packages from requirements.txt file" python3 -m pip install --force-reinstall -r requirements.txt

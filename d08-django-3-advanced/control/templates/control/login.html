@@ -1,0 +1,12 @@
+{% extends 'control/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}<title>Login</title>{% endblock title %}
+{% block content %}
+	{% if form is not None %}
+		<form action="{% url 'login' %}" method="post" class="mx-3 my-2">
+			{% csrf_token %}
+			{% bootstrap_form form %}
+			{% bootstrap_button content="Login" %}
+		</form>
+	{% endif %}
+{% endblock content %}

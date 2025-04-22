@@ -1,15 +1,16 @@
 {% load django_bootstrap5 %}
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block title %}<title>Homepage</title>{% endblock title %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
 
-<body>
+<body class="d-flex flex-column vh-100" style="font-family: Arial, Helvetica, sans-serif;">
     {% block content %}{% endblock content %}
 </body>
 

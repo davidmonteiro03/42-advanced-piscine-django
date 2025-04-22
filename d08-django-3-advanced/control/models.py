@@ -9,7 +9,7 @@ class Article(models.Model):
     synopsis = models.CharField(max_length=312)
     content = models.TextField()
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
 
 
@@ -17,5 +17,5 @@ class UserFavouriteArticle(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     article = models.ForeignKey(to=Article, on_delete=models.CASCADE)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.article.title
