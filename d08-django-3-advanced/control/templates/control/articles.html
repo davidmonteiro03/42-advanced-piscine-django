@@ -1,36 +1,41 @@
 {% extends 'control/base.html' %}
 {% load django_bootstrap5 %}
-{% block title %}<title>Articles</title>{% endblock title %}
+{% load i18n %}
+{% block title %}<title>{% trans 'Last Articles' %}</title>{% endblock title %}
 {% block content %}
 	{% if articles is not None and articles|length > 0 %}
-		<div class="mx-3">
+		<div class="mx-3 my-2">
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Title</th>
-						<th>Synopsis</th>
-						<th>Writer</th>
-						<th>Created</th>
-						<th>When</th>
+						<th>{% trans 'Title' %}</th>
+						<th>{% trans 'Synopsis' %}</th>
+						<th>{% trans 'Writer' %}</th>
+						<th>{% trans 'Synopsis' %}</th>
+						<th>{% trans 'When' %}</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for article in articles %}
 						<tr>
 							<td>{{ article.title }}</td>
-							<td>{{ article.synopsis }}</td>
+							<td>{{ article.synopsis|truncatechars:20 }}</td>
 							<td>{{ article.author }}</td>
 							<td>{{ article.created }}</td>
 							<td>
-								<div class="d-flex flex-row">
-									<span class="me-auto">{{ article.when }} ago</span>
-									<a class="btn btn-info text-light align-middle h-100 ms-2">Read</a>
+								<div class="d-flex flex-row text-nowrap">
+									<span class="me-auto">{{ article.created|timesince }}</span>
+									<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' article.pk %}">{% trans 'Read' %}</a>
 								</div>
 							</td>
 						</tr>
 					{% endfor %}
 				</tbody>
 			</table>
+		</div>
+	{% else %}
+		<div class="mx-3 my-2 py-2 px-3">
+			<span class="fs-5 fw-bold">{% trans 'There are no articles to show.' %}</span>
 		</div>
 	{% endif %}
 {% endblock content %}

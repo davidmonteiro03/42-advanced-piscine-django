@@ -1,18 +1,1 @@
-[
-	{
-		"model": "control.userfavouritearticle",
-		"pk": 1,
-		"fields": {
-			"user": 1,
-			"article": 3
-		}
-	},
-	{
-		"model": "control.userfavouritearticle",
-		"pk": 2,
-		"fields": {
-			"user": 2,
-			"article": 1
-		}
-	}
-]
+[{"model": "control.userfavouritearticle", "pk": 1, "fields": {"user": 2, "article": 3}}, {"model": "control.userfavouritearticle", "pk": 2, "fields": {"user": 2, "article": 4}}, {"model": "control.userfavouritearticle", "pk": 3, "fields": {"user": 1, "article": 3}}, {"model": "control.userfavouritearticle", "pk": 4, "fields": {"user": 1, "article": 4}}, {"model": "control.userfavouritearticle", "pk": 7, "fields": {"user": 1, "article": 1}}, {"model": "control.userfavouritearticle", "pk": 8, "fields": {"user": 2, "article": 5}}]

@@ -2,4 +2,6 @@
 
 . install.sh
 . migrate.sh
-. populate.sh
+. loaddata.sh
+. passwords.sh
+. dumpdata.sh

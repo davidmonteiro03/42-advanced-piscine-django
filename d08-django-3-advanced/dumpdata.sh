@@ -1,0 +1,12 @@
+#!/bin/bash
+
+runcmd()
+{
+	echo -ne "$1... "
+	shift
+	$* > /dev/null 2>&1 && echo -e "\e[38;2;0;150;0mOK\e[0m" || echo -e "\e[38;2;150;0;0mFAILED\e[0m"
+}
+
+runcmd "Saving users"       python3 manage.py dumpdata auth.user --output=control/users.json
+runcmd "Saving articles"    python3 manage.py dumpdata control.article --output=control/articles.json
+runcmd "Saving favourites"  python3 manage.py dumpdata control.userfavouritearticle --output=control/favourites.json
