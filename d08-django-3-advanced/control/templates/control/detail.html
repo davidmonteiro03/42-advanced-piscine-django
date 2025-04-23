@@ -1,0 +1,21 @@
+{% extends 'control/base.html' %}
+{% load django_bootstrap5 %}
+{% if article is not None %}
+	{% block content %}
+		<div class="d-flex flex-column px-3 py-2 h-100">
+			<div class="d-flex flex-column justify-content-center align-items-center w-100 px-3 py-2">
+				<span class="fs-2">{{ article.title }}</span>
+				<span class="fs-5"><i>{{ article.synopsis }}</i></span>
+			</div>
+			<div class="d-flex flex-column justify-content-center align-items-end w-100 px-3 py-2">
+				<span class="fs-5 fw-bold">{{ article.author }}</span>
+			</div>
+			<div class="d-flex flex-column p-3 pb-0 h-100 overflow-auto">
+				<p class="fs-6">{{ article.content }}</p>
+			</div>
+			<div class="d-flex flex-column justify-content-center align-items-end w-100 p-2 px-3">
+				<span class="fs-6 text-black">{{ article.created|date:"C\r\e\a\t\e\d \o\n F j, Y \a\t h:m:s" }}</span>
+			</div>
+		</div>
+	{% endblock content %}
+{% endif %}

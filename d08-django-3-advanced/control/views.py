@@ -1,13 +1,13 @@
-from django.views.generic import ListView, RedirectView, FormView
+from django.views.generic import ListView, RedirectView, FormView, DetailView
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from typing import Any
-from control.models import Article
+from control.models import Article, UserFavouriteArticle
 from control.utils import get_time_diff_description
 
 
@@ -47,3 +47,39 @@ class Login(FormView):
             return
         login(self.request, user)
         return super().form_valid(form)
+
+
+class Publications(ListView):
+    model = Article
+    template_name = 'control/publications.html'
+    context_object_name = 'publications'
+
+
+class Detail(DetailView):
+    model = Article
+    template_name = 'control/detail.html'
+    context_object_name = 'article'
+
+
+class Logout(RedirectView):
+    url = reverse_lazy('home')
+
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if request.user.is_authenticated is True:
+            logout(request)
+        return super().get(request, *args, **kwargs)
+
+
+class Favourites(ListView):
+    model = UserFavouriteArticle
+    template_name = 'control/favourites.html'
+    context_object_name = 'favourites'
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        if not request.user.is_authenticated:
+            return redirect(reverse_lazy('home'))
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)

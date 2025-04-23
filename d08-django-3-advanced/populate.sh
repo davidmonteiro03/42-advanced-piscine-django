@@ -9,4 +9,5 @@ runcmd()
 
 runcmd "Creating users"       python3 manage.py loaddata control/users.json
 runcmd "Creating articles"    python3 manage.py loaddata control/articles.json
+runcmd "Creating favourites"  python3 manage.py loaddata control/favourites.json
 runcmd "Setting up passwords" python3 manage.py shell < control/setup_pws.py

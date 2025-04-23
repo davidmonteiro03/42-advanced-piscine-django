@@ -16,18 +16,18 @@
 				</thead>
 				<tbody>
 					{% for article in articles %}
-					<tr>
-						<td>{{ article.title }}</td>
-						<td>{{ article.synopsis }}</td>
-						<td>{{ article.author }}</td>
-						<td>{{ article.created }}</td>
-						<td>
-							<div class="d-flex flex-row">
-								<span class="me-auto">{{ article.when }} ago</span>
-								<a class="btn btn-info text-light align-middle h-100 ms-2">Read</a>
-							</div>
-						</td>
-					</tr>
+						<tr>
+							<td>{{ article.title }}</td>
+							<td>{{ article.synopsis }}</td>
+							<td>{{ article.author }}</td>
+							<td>{{ article.created }}</td>
+							<td>
+								<div class="d-flex flex-row">
+									<span class="me-auto">{{ article.when }} ago</span>
+									<a class="btn btn-info text-light align-middle h-100 ms-2">Read</a>
+								</div>
+							</td>
+						</tr>
 					{% endfor %}
 				</tbody>
 			</table>

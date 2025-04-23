@@ -1,0 +1,32 @@
+{% extends 'control/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}<title>Publications</title>{% endblock title %}
+{% block content %}
+	{% if publications is not None and publications|length > 0 %}
+		<div class="mx-3">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Synopsis</th>
+						<th>Created</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for publication in publications %}
+						<tr>
+							<td>{{ publication.title }}</td>
+							<td>{{ publication.synopsis }}</td>
+							<td>
+								<div class="d-flex flex-row">
+									<span class="me-auto">{{ publication.created }}</span>
+									<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' publication.pk %}">Read</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+{% endblock content %}

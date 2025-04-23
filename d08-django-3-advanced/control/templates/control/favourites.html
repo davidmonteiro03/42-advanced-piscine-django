@@ -1,0 +1,12 @@
+{% extends 'control/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}<title>Favourites</title>{% endblock title %}
+{% block content %}
+	{% if favourites is not None and favourites|length > 0 %}
+		<div class="mx-3">
+			{% for favourite in favourites %}
+				<a href="{% url 'detail' favourite.article.pk %}">{{ favourite.article }}</a>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock content %}
