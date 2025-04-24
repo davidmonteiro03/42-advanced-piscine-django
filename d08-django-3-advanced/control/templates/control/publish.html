@@ -1,13 +1,12 @@
 {% extends 'control/base.html' %}
 {% load django_bootstrap5 %}
-{% load i18n %}
-{% block title %}<title>{% trans 'Publish' %}</title>{% endblock title %}
+{% block title %}<title>Publish</title>{% endblock title %}
 {% block content %}
 	{% if form is not None %}
 		<form action="{% url 'publish' %}" method="post" class="mx-3 my-2">
 			{% csrf_token %}
 			{% bootstrap_form form %}
-			{% bootstrap_button button_type="submit" content=_("Publish") %}
+			{% bootstrap_button button_type="submit" content="Publish" %}
 		</form>
 	{% endif %}
 {% endblock content %}

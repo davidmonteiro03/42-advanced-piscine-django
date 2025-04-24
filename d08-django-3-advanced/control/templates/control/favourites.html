@@ -1,7 +1,6 @@
 {% extends 'control/base.html' %}
 {% load django_bootstrap5 %}
-{% load i18n %}
-{% block title %}<title>{% trans 'Favourites' %}</title>{% endblock title %}
+{% block title %}<title>Favourites</title>{% endblock title %}
 {% block content %}
 	{% if favourites is not None and favourites|length > 0 %}
 		<div class="mx-3 my-4">
@@ -13,7 +12,7 @@
 		</div>
 	{% else %}
 		<div class="mx-3 my-2 py-2 px-3">
-			<span class="fs-5 fw-bold">{% trans 'There are no favourites to show.' %}</span>
+			<span class="fs-5 fw-bold">There are no favourites to show.</span>
 		</div>
 	{% endif %}
 {% endblock content %}

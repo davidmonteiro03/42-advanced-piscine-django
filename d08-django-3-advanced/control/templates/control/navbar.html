@@ -1,15 +1,14 @@
 {% load django_bootstrap5 %}
-{% load i18n %}
 <div class="d-flex flex-row align-items-center mx-3 bg-dark rounded text-secondary px-2" style="height: 50px">
 	<div class="d-flex flex-row me-auto">
-		<a href="{% url 'home' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Home' %}</a>
-		<a href="{% url 'articles' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Last Articles' %}</a>
+		<a href="{% url 'home' %}" class="px-3 text-decoration-none text-secondary">Home</a>
+		<a href="{% url 'articles' %}" class="px-3 text-decoration-none text-secondary">Last Articles</a>
 		{% if not user.is_authenticated %}
-			<a href="{% url 'register' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Register' %}</a>
+			<a href="{% url 'register' %}" class="px-3 text-decoration-none text-secondary">Register</a>
 		{% else %}
-			<a href="{% url 'favourites' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Favourites' %}</a>
-			<a href="{% url 'publications' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Publications' %}</a>
-			<a href="{% url 'publish' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Publish' %}</a>
+			<a href="{% url 'favourites' %}" class="px-3 text-decoration-none text-secondary">Favourites</a>
+			<a href="{% url 'publications' %}" class="px-3 text-decoration-none text-secondary">Publications</a>
+			<a href="{% url 'publish' %}" class="px-3 text-decoration-none text-secondary">Publish</a>
 		{% endif %}
 	</div>
 	<div class="d-flex flex-row px-4">
@@ -18,11 +17,11 @@
 				{% csrf_token %}
 				{% bootstrap_field login_form.username wrapper_class="me-1" %}
 				{% bootstrap_field login_form.password wrapper_class="me-1" %}
-				{% bootstrap_button button_type="submit" extra_classes="btn-light text-dark" content=_("Login") %}
+				{% bootstrap_button button_type="submit" extra_classes="btn-light text-dark" content="Login" %}
 			</form>
 		{% else %}
-			<span class="px-3">{% blocktrans with ft_user=user %}Logged as {{ ft_user }}{% endblocktrans %}</span>
-			<a href="{% url 'logout' %}" class="px-3 text-decoration-none text-secondary">{% trans 'Logout' %}</a>
+			<span class="px-3">Logged as {{ user }}</span>
+			<a href="{% url 'logout' %}" class="px-3 text-decoration-none text-secondary">Logout</a>
 		{% endif %}
 	</div>
 </div>

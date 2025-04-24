@@ -10,7 +10,6 @@ from django.forms import BaseModelForm
 from typing import Any
 from control.models import Article, UserFavouriteArticle
 from control.forms import LoginForm, ArticleForm, UserFavouriteArticleForm
-from control.utils import update_language
 
 
 class Articles(ListView):
@@ -19,7 +18,6 @@ class Articles(ListView):
     context_object_name = 'articles'
 
     def get_queryset(self):
-        update_language(self.request)
         queryset = super().get_queryset()
         return queryset.order_by('-created')
 
@@ -34,11 +32,9 @@ class Login(FormView):
     success_url = reverse_lazy('home')
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         return redirect(self.success_url)
 
     def form_valid(self, form: Any) -> HttpResponse:
-        update_language(self.request)
         credentials = {'username': form.cleaned_data['username'],
                        'password': form.cleaned_data['password']}
         user = authenticate(self.request, **credentials)
@@ -54,13 +50,11 @@ class Publications(ListView):
     context_object_name = 'publications'
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         if not request.user.is_authenticated:
             return redirect(reverse_lazy('home'))
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        update_language(self.request)
         queryset = super().get_queryset()
         return queryset.filter(author=self.request.user)
 
@@ -75,7 +69,6 @@ class Logout(RedirectView):
     url = reverse_lazy('home')
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         if request.user.is_authenticated is True:
             logout(request)
         return super().get(request, *args, **kwargs)
@@ -87,7 +80,6 @@ class Favourites(ListView):
     context_object_name = 'favourites'
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         if not request.user.is_authenticated:
             return redirect(reverse_lazy('home'))
         return super().get(request, *args, **kwargs)
@@ -103,13 +95,11 @@ class Register(CreateView):
     success_url = reverse_lazy('home')
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         if request.user.is_authenticated:
             return redirect(self.success_url)
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
-        update_language(self.request)
         response = super().form_valid(form)
         credentials = {'username': form.cleaned_data['username'],
                        'password': form.cleaned_data['password1']}
@@ -126,7 +116,6 @@ class Publish(CreateView):
     success_url = reverse_lazy('publications')
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         if not request.user.is_authenticated:
             return redirect(reverse_lazy('home'))
         return super().get(request, *args, **kwargs)
@@ -142,11 +131,9 @@ class AddToFavourite(CreateView):
     success_url = reverse_lazy('favourites')
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        update_language(self.request)
         return redirect(self.success_url)
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
-        update_language(self.request)
         try:
             article = get_object_or_404(Article, id=self.kwargs['pk'])
             if not article:

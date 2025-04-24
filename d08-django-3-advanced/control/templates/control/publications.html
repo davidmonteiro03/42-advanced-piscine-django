@@ -1,16 +1,15 @@
 {% extends 'control/base.html' %}
 {% load django_bootstrap5 %}
-{% load i18n %}
-{% block title %}<title>{% trans 'Publications' %}</title>{% endblock title %}
+{% block title %}<title>Publications</title>{% endblock title %}
 {% block content %}
 	{% if publications is not None and publications|length > 0 %}
 		<div class="mx-3 my-2">
 			<table class="table">
 				<thead>
 					<tr>
-						<th>{% trans 'Title' %}</th>
-						<th>{% trans 'Synopsis' %}</th>
-						<th>{% trans 'Created' %}</th>
+						<th>Title</th>
+						<th>Synopsis</th>
+						<th>Created</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -21,7 +20,7 @@
 							<td>
 								<div class="d-flex flex-row text-nowrap">
 									<span class="me-auto">{{ publication.created }}</span>
-									<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' publication.pk %}">{% trans 'Read' %}</a>
+									<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' publication.pk %}">Read</a>
 								</div>
 							</td>
 						</tr>
@@ -31,7 +30,7 @@
 		</div>
 	{% else %}
 		<div class="mx-3 my-2 py-2 px-3">
-			<span class="fs-5 fw-bold">{% trans 'There are no publications to show.' %}</span>
+			<span class="fs-5 fw-bold">There are no publications to show.</span>
 		</div>
 	{% endif %}
 {% endblock content %}

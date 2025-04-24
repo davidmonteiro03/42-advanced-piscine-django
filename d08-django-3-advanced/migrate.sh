@@ -9,4 +9,4 @@ runcmd()
 
 runcmd "Making migrations"   python3 manage.py makemigrations control
 runcmd "Applying migrations" python3 manage.py migrate
-runcmd "Loading languages"   django-admin compilemessages
+# runcmd "Loading languages"   django-admin compilemessages
