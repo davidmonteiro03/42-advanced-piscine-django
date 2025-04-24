@@ -3,7 +3,7 @@
 {% block title %}<title>Register</title>{% endblock title %}
 {% block content %}
 	{% if form is not None %}
-		<form action="{% url 'register' %}" method="post" class="mx-3 my-2">
+		<form action="{% url 'register' %}" method="post" class="my-2">
 			{% csrf_token %}
 			{% bootstrap_form form %}
 			{% bootstrap_button button_type="submit" content="Register" %}

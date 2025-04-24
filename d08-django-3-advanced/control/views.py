@@ -1,21 +1,39 @@
 from django.views.generic import ListView, RedirectView, FormView, DetailView, CreateView
-from django.db import models
-from django.utils import timezone
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.forms import BaseModelForm
-from typing import Any
+from django.utils import translation
+from articles import settings
 from control.models import Article, UserFavouriteArticle
 from control.forms import LoginForm, ArticleForm, UserFavouriteArticleForm
+from typing import Any
 
 
 class Articles(ListView):
     model = Article
     template_name = 'control/articles.html'
     context_object_name = 'articles'
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        try:
+            lang = self.kwargs['lang']
+            if lang not in dict(settings.LANGUAGES):
+                return redirect(reverse_lazy('articles'))
+        except Exception:
+            lang = settings.LANGUAGE_CODE
+        translation.activate(lang)
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(**kwargs)
+        try:
+            context_data['lang'] = self.kwargs['lang']
+        except Exception:
+            context_data['lang'] = settings.LANGUAGE_CODE
+        return context_data
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -32,7 +50,7 @@ class Login(FormView):
     success_url = reverse_lazy('home')
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        return redirect(self.success_url)
+        return redirect(reverse_lazy('home'))
 
     def form_valid(self, form: Any) -> HttpResponse:
         credentials = {'username': form.cleaned_data['username'],
@@ -63,6 +81,15 @@ class Detail(DetailView):
     model = Article
     template_name = 'control/detail.html'
     context_object_name = 'article'
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context_data = super().get_context_data(**kwargs)
+        try:
+            article: Article = context_data['article']
+            context_data['in_favourites'] = UserFavouriteArticle.objects.filter(user=self.request.user, article=article).exists()
+        except Exception:
+            pass
+        return context_data
 
 
 class Logout(RedirectView):
@@ -96,7 +123,7 @@ class Register(CreateView):
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         if request.user.is_authenticated:
-            return redirect(self.success_url)
+            return redirect(reverse_lazy('home'))
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
@@ -131,7 +158,7 @@ class AddToFavourite(CreateView):
     success_url = reverse_lazy('favourites')
 
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        return redirect(self.success_url)
+        return redirect(reverse_lazy('home'))
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         try:
@@ -142,4 +169,4 @@ class AddToFavourite(CreateView):
             form.instance.article = article
             return super().form_valid(form)
         except Exception:
-        	return redirect(self.success_url)
+        	return redirect(reverse_lazy('home'))

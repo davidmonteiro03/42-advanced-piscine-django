@@ -13,4 +13,5 @@ urlpatterns = [
     re_path(r'^register/?$', Register.as_view(), name='register'),
     re_path(r'^publish/?$', Publish.as_view(), name='publish'),
     re_path(r'^add_to_favourite/(?P<pk>\d+)/?$', AddToFavourite.as_view(), name='add_to_favourite'),
+    re_path(r'^(?P<lang>[a-z]{2})/articles/?$', Articles.as_view(), name='articles'),
 ]

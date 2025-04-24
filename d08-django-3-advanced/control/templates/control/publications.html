@@ -3,33 +3,31 @@
 {% block title %}<title>Publications</title>{% endblock title %}
 {% block content %}
 	{% if publications is not None and publications|length > 0 %}
-		<div class="mx-3 my-2">
-			<table class="table">
-				<thead>
+		<table class="table my-2">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Synopsis</th>
+					<th>Created</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for publication in publications %}
 					<tr>
-						<th>Title</th>
-						<th>Synopsis</th>
-						<th>Created</th>
+						<td>{{ publication.title }}</td>
+						<td>{{ publication.synopsis|truncatechars:20 }}</td>
+						<td>
+							<div class="d-flex flex-row text-nowrap">
+								<span class="me-auto">{{ publication.created }}</span>
+								<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' publication.pk %}">Read</a>
+							</div>
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					{% for publication in publications %}
-						<tr>
-							<td>{{ publication.title }}</td>
-							<td>{{ publication.synopsis|truncatechars:20 }}</td>
-							<td>
-								<div class="d-flex flex-row text-nowrap">
-									<span class="me-auto">{{ publication.created }}</span>
-									<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' publication.pk %}">Read</a>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+				{% endfor %}
+			</tbody>
+		</table>
 	{% else %}
-		<div class="mx-3 my-2 py-2 px-3">
+		<div class="px-3 py-2">
 			<span class="fs-5 fw-bold">There are no publications to show.</span>
 		</div>
 	{% endif %}

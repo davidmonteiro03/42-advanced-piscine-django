@@ -1,0 +1,16 @@
+{% load django_bootstrap5 %}
+{% load i18n %}
+{% if lang %}
+	<div class="d-flex flex-column justify-content-center align-items-end">
+		{% for code, name in LANGUAGES.items %}
+			{% if code != lang %}
+				<a href="{% url 'articles' code %}" class="text-decoration-none">{{ name }}</a>
+			{% endif %}
+		{% endfor %}
+	</div>
+{% endif %}
+<div class="d-flex flex-row align-items-baseline my-2">
+	<span class="fs-1">Articles</span>
+	<span class="ms-2 fs-3 text-secondary">Share your writings</span>
+	<hr style="color: lightgrey "/>
+</div>

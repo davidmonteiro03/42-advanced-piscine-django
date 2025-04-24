@@ -10,8 +10,9 @@
 	{% bootstrap_javascript %}
 </head>
 
-<body class="d-flex flex-column vh-100" style="font-family: Arial, Helvetica, sans-serif;">
-	{% include 'control/navbar.html' %}
+<body class="d-flex flex-column px-3 py-2 vh-100" style="font-family: Arial, Helvetica, sans-serif;">
+	{% include 'control/header.html' %}
+	{% include 'control/menu.html' %}
 	{% block content %}{% endblock content %}
 </body>
 

@@ -1,40 +1,39 @@
 {% extends 'control/base.html' %}
 {% load django_bootstrap5 %}
-{% block title %}<title>Last Articles</title>{% endblock title %}
+{% load i18n %}
+{% block title %}<title>{% trans 'Last Articles' %}</title>{% endblock title %}
 {% block content %}
 	{% if articles is not None and articles|length > 0 %}
-		<div class="mx-3 my-2">
-			<table class="table">
-				<thead>
+		<table class="table my-2">
+			<thead>
+				<tr>
+					<th>{% trans 'Title' %}</th>
+					<th>{% trans 'Synopsis' %}</th>
+					<th>{% trans 'Writer' %}</th>
+					<th>{% trans 'Created' %}</th>
+					<th>{% trans 'When' %}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for article in articles %}
 					<tr>
-						<th>Title</th>
-						<th>Synopsis</th>
-						<th>Writer</th>
-						<th>Synopsis</th>
-						<th>When</th>
+						<td>{{ article.title }}</td>
+						<td>{{ article.synopsis|truncatechars:20 }}</td>
+						<td>{{ article.author }}</td>
+						<td>{{ article.created }}</td>
+						<td>
+							<div class="d-flex flex-row text-nowrap">
+								<span class="me-auto">{% blocktrans with context_when=article.created|timesince %}{{ context_when }} ago{% endblocktrans %}</span>
+								<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' article.pk %}">{% trans 'Read' %}</a>
+							</div>
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-					{% for article in articles %}
-						<tr>
-							<td>{{ article.title }}</td>
-							<td>{{ article.synopsis|truncatechars:20 }}</td>
-							<td>{{ article.author }}</td>
-							<td>{{ article.created }}</td>
-							<td>
-								<div class="d-flex flex-row text-nowrap">
-									<span class="me-auto">{{ article.created|timesince }}</span>
-									<a class="btn btn-info text-light align-middle h-100 ms-2" href="{% url 'detail' article.pk %}">Read</a>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+				{% endfor %}
+			</tbody>
+		</table>
 	{% else %}
-		<div class="mx-3 my-2 py-2 px-3">
-			<span class="fs-5 fw-bold">There are no articles to show.</span>
+		<div class="px-3 py-2">
+			<span class="fs-5 fw-bold">{% trans 'There are no articles to show.' %}</span>
 		</div>
 	{% endif %}
 {% endblock content %}
