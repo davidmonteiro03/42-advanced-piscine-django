@@ -1,0 +1,19 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	{% block title %}<title>Home</title>{% endblock title %}
+	{% bootstrap_css %}
+	{% bootstrap_javascript %}
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	{% block scripts %}{% endblock scripts %}
+</head>
+
+<body class="d-flex flex-column px-3 py-2 vh-100">
+	{% block content %}{% endblock content %}
+</body>
+
+</html>
