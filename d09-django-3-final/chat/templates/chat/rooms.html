@@ -1,0 +1,7 @@
+{% if chat_rooms %}
+	<div>
+		{% for cr in chat_rooms %}
+			<a href="/chatrooms/{{ cr.name }}">{{ cr }}</a>
+		{% endfor %}
+	</div>
+{% endif %}

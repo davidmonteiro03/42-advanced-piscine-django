@@ -1,0 +1,8 @@
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+
+class Consumer(AsyncWebsocketConsumer):
+
+    async def connect(self):
+        await self.accept()
+        print(self.scope)

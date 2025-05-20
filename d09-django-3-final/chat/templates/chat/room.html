@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}<title>{{ chat_room }} chat</title>{% endblock title %}
+{% block scripts %}
+	{% load static %}
+	<script src="{% static 'chat/js/main.js' %}"></script>
+{% endblock scripts %}
+{% block content %}
+	<code>{{ chat_room }}</code>
+{% endblock content %}

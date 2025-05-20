@@ -7,12 +7,12 @@ from typing import Any
 import json
 
 
-class HomeView(FormView):
+class Home(FormView):
     form_class = AuthenticationForm
     template_name = 'account/home.html'
 
 
-class LoginView(FormView):
+class Login(FormView):
     form_class = AuthenticationForm
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
@@ -29,7 +29,7 @@ class LoginView(FormView):
         return HttpResponse(json.dumps({'error': "Invalid username or password."}), status=401)
 
 
-class LogoutView(View):
+class Logout(View):
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         logout(request)
         return JsonResponse({'html': render_to_string('account/login.html', {'form': AuthenticationForm()}, request)}, status=200)
