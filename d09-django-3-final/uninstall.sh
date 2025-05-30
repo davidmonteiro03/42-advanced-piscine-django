@@ -5,6 +5,7 @@ runcmd()
 	$* > /dev/null 2>&1 || true
 }
 
+runcmd bash dumpdata.sh
 runcmd deactivate
 runcmd rm -rfv virtualenv
 runcmd find * -type d -name 'staticfiles' -exec rm -rfv {} \;

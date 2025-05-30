@@ -15,15 +15,15 @@ function logout(event) {
 						const data = JSON.parse(xhr.responseText);
 						document.body.innerHTML = data.html;
 					}
-					catch (e) { console.error(`Error: ${error}`); }
+					catch (err) { console.error(`Error: ${err}`); }
 				}
 			}
 		};
 		xhr.send(formData);
 		return 0;
 	}
-	catch (e) {
-		console.error(`Error: ${error}`);
+	catch (err) {
+		console.error(`Error: ${err}`);
 		return 1;
 	}
 }

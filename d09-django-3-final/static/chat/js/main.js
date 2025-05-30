@@ -1,6 +1,10 @@
-const ws = new WebSocket('ws://' + window.location.host + '/ws/');
+const host = window.location.host;
+const roomPathname = window.location.pathname;
+const wsURL = `ws://${host}${roomPathname}`;
 
-ws.onopen = function (e) {
-	console.log(e);
-	console.log('<username> has joined the chat');
+const gWebSocket = new WebSocket(wsURL);
+
+gWebSocket.onmessage = function (e) {
+	let jsonData = JSON.parse(e.data);
+	console.log(jsonData.message);
 };
