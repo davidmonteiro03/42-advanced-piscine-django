@@ -1,18 +1,18 @@
 {% load django_bootstrap5 %}
 {% if not request.user.is_authenticated %}
-	{% if form %}
-		<form onsubmit="login(event)" method="post" class="form">
-			{% csrf_token %}
-			{% bootstrap_form form %}
-			{% bootstrap_button button_type="submit" content="Login" %}
-		</form>
-	{% endif %}
+{% if form %}
+<form onsubmit="login(event)" method="post" class="form">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% bootstrap_button button_type="submit" content="Login" %}
+</form>
+{% endif %}
 {% else %}
-	<div>
-		<span>Logged as {{ request.user }}</span>
-		<form onsubmit="logout(event)" method="post" class="form mt-2">
-			{% csrf_token %}
-			{% bootstrap_button button_type="submit" content="Logout" extra_classes="btn-danger" %}
-		</form>
-	</div>
+<div>
+	<span>Logged as {{ request.user }}</span>
+	<form onsubmit="logout(event)" method="post" class="form mt-2">
+		{% csrf_token %}
+		{% bootstrap_button button_type="submit" content="Logout" extra_classes="btn-danger" %}
+	</form>
+</div>
 {% endif %}

@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from chat.models import Room
+from chat.forms import ChatMessageForm
 
 
 class Home(ListView):
@@ -26,3 +27,8 @@ class ChatRoom(DetailView):
         if not request.user.is_authenticated:
             return redirect(reverse_lazy("account:home"))
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['form'] = ChatMessageForm()
+        return context_data

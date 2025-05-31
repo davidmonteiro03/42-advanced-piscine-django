@@ -1,7 +1,7 @@
 {% if chat_rooms %}
-	<div>
-		{% for cr in chat_rooms %}
-			<a href="{% url 'chat:room' cr.name %}">{{ cr }}</a>
-		{% endfor %}
-	</div>
+<div>
+	{% for cr in chat_rooms %}
+	<a href="{% url 'chat:room' cr.name %}">{{ cr }}</a>
+	{% endfor %}
+</div>
 {% endif %}
