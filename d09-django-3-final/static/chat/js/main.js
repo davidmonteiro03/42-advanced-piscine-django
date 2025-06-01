@@ -3,6 +3,24 @@ let gRoomPathname = undefined;
 let gWebSocketURL = undefined;
 let gWebSocket = undefined;
 
+function joinOrLeave(jsonData, action, fontColor) {
+	let username = jsonData.data.username;
+
+	let $messagesDiv = $('#messages');
+
+	let $newMessageNode = $('<div></div>');
+	let $usernameNode = $('<span></span>');
+
+	$newMessageNode.addClass(`d-flex justify-content-center align-items-center w-100 text-${fontColor}`);
+
+	$newMessageNode.css('font-size', '18px');
+
+	$usernameNode.html(`<b>${username}</b> has ${action} the chat`);
+
+	$newMessageNode.append($usernameNode);
+	$messagesDiv.append($newMessageNode);
+}
+
 function main() {
 	try {
 		gHost = window.location.host;
@@ -14,22 +32,8 @@ function main() {
 		gWebSocket.onmessage = function (e) {
 			let jsonData = JSON.parse(e.data);
 
-			if (jsonData.cmd === 'join') {
-				let username = jsonData.data.username;
-
-				let $messagesDiv = $('#messages');
-
-				let $newMessageNode = $('<div></div>');
-				let $usernameNode = $('<span></span>');
-
-				$newMessageNode.addClass('d-flex justify-content-center align-items-center w-100 text-success');
-				$newMessageNode.css('font-size', '18px');
-
-				$usernameNode.html(`<b>${username}</b> has joined the chat`);
-
-				$newMessageNode.append($usernameNode);
-				$messagesDiv.append($newMessageNode);
-			}
+			if (jsonData.cmd === 'join') { joinOrLeave(jsonData, 'joined', 'success'); }
+			else if (jsonData.cmd === 'leave') { joinOrLeave(jsonData, 'left', 'danger'); }
 			else if (jsonData.cmd === 'message') {
 				let text = jsonData.data.text;
 				let username = jsonData.data.username;
