@@ -1,1 +1,0 @@
-[{"model": "chat.room", "pk": 1, "fields": {"name": "students"}}, {"model": "chat.room", "pk": 2, "fields": {"name": "pisciners"}}, {"model": "chat.room", "pk": 3, "fields": {"name": "staff"}}]

@@ -1,7 +1,0 @@
-{% if chat_rooms %}
-<div class="d-flex flex-row align-items-center my-1">
-	{% for cr in chat_rooms %}
-	<a href="{% url 'chat:room' cr.name %}" class="btn btn-primary text-decoration-none mx-1">{{ cr }}</a>
-	{% endfor %}
-</div>
-{% endif %}
