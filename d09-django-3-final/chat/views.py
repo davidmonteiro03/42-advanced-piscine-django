@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from chat.models import Room
+from chat.models import Room, Message
 from chat.forms import ChatMessageForm
 
 
@@ -31,4 +31,6 @@ class ChatRoom(DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['form'] = ChatMessageForm()
+        context_data['history'] = list(Message.objects.filter(room=context_data['chat_room']).order_by('-timestamp')[:3])
+        context_data['history'].reverse()
         return context_data
