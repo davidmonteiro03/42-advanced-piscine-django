@@ -1,0 +1,50 @@
+{% extends 'chat/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}<title>{{ chat_room }}</title>{% endblock title %}
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+	crossorigin="anonymous"></script>
+{% load static %}
+<script src="{% static 'chat/js/main.js' %}"></script>
+<script src="{% static 'chat/js/sendMessage.js' %}"></script>
+{% endblock scripts %}
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
+	<div class="d-flex flex-row justify-content-center align-items-center w-100 h-100">
+		<div class="d-flex flex-column justify-content-start align-items-center w-25 h-100">
+			<span class="py-1 fw-bold" style="font-size: 18px;"><i>#{{ chat_room }}</i></span>
+			<div id="userlist"
+				class="d-flex flex-column justify-content-start align-items-center w-100 h-100 overflow-auto">
+			</div>
+		</div>
+		<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
+			<div class="d-flex flex-column-reverse w-100 h-100 overflow-auto px-3 py-2">
+				<div id="messages" class="d-flex flex-column">
+					{% if history %}
+					<div class="d-flex flex-column justify-content-center align-items-center w-100 my-1 opacity-50">
+						<span class="d-flex flex-column justify-content-center align-items-center fw-bold w-100"
+							style="font-size: 18px">History</span>
+					</div>
+					{% for m in history %}
+					<div class="d-flex flex-column justify-content-center align-items-start w-100 my-1 opacity-50">
+						<span class="d-flex flex-column justify-content-center align-items-start fw-bold"
+							style="font-size: 20px">{{ m.user }}</span>
+						<span class="d-flex flex-column justify-content-center align-items-start"
+							style="font-size: 14px">{{ m.text }}</span>
+					</div>
+					{% endfor %}
+					<hr>
+					{%endif%}
+				</div>
+			</div>
+			<div class="d-flex flex-column justify-content-center align-items-center w-100 px-3 py-2">
+				<form onsubmit="sendMessage(event)" method="post" class="d-flex flex-row w-100">
+					{% csrf_token %}
+					{% bootstrap_field form.text show_label=False wrapper_class="me-1 w-100" field_class="shadow-none" %}
+					{% bootstrap_button button_type="submit" content="Send Message" extra_classes="text-nowrap" %}
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

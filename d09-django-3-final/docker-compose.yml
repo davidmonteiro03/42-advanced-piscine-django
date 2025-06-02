@@ -1,0 +1,35 @@
+networks:
+  cluster:
+    name: cluster
+
+volumes:
+  postgres_data:
+    name: postgres_data
+  redis_data:
+    name: redis_data
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=chat
+      - POSTGRES_USER=dcaetano
+      - POSTGRES_PASSWORD=secret
+    networks:
+      - cluster
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+  redis:
+    container_name: redis
+    image: redis:latest
+    networks:
+      - cluster
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+    restart: always
